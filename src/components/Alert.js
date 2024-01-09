@@ -15,7 +15,12 @@ import { useRef } from "react";
 function Alert() {
   const { isOpen, type, message, onClose } = useAlertContext();
   const cancelRef = useRef();
-  const isSuccess = type === "success"
+  //const isSuccess = 'success' ? 'All good' : 'Ooops'
+  const isSuccess = type !== ""
+   
+  //console.log("type value in alert %d", type)
+
+
 
   return (
     <AlertDialog

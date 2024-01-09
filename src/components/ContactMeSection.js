@@ -29,24 +29,9 @@ const LandingSection = () => {
       type: 'hireMe',
       comment:'',
     },
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        await formik.validateForm(); 
-        if (formik.isValid) {
-          const response = await submit(values);
-          if (response && response.type === "success") {
-            onOpen(`Form submitted successfully. Hello, ${values.firstName}!`);
-            resetForm();
-          } else {
-            onOpen(`Something went wrong. Please try again later`);
-          }
-        }
-      } catch (errors) {
-        onOpen(`Please fill in all required fields correctly.`);
-      }
-    },
-    
-    
+    onSubmit: (values) => { 
+      submit('', values); 
+    }, 
     
     validationSchema: Yup.object({
       firstName: Yup.string().required('Required'),
@@ -56,14 +41,14 @@ const LandingSection = () => {
     }),
   });
 
-  useEffect(() => {
-    if (response && response.type === "success") {
-      onOpen(`Form submitted successfully. Hello, ${formik.values.firstName}!`);
-      
-    } else if (response && response.type === "error") {
-      onOpen(`Something went wrong. Please try again later`);
-    }
-  }, [response, onOpen, formik]);
+  useEffect(() => { 
+    if (response) { 
+      onOpen(response.type, response.message); 
+      if (response.type === 'success') { 
+        formik.resetForm(); 
+      } 
+    } 
+  }, [response]); 
 
   return (
     <FullScreenSection
@@ -77,19 +62,19 @@ const LandingSection = () => {
           Contact me
         </Heading>
         <Box p={6} rounded="md" w="100%">
-          <form onSubmit={formik.handleSubmit}>
-            <VStack spacing={4}>
-              <FormControl isInvalid={formik.touched.firstName && formik.errors.firstName}>
-                <FormLabel htmlFor="firstName">Name</FormLabel>
-                <Input
-                  {...formik.getFieldProps('firstName')}
-                  id="firstName"
-                  name="firstName"
-                />
-                <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={formik.touched.email && formik.errors.email}>
-                <FormLabel htmlFor="email">Email Address</FormLabel>
+        <form onSubmit={formik.handleSubmit}> 
+           <VStack spacing={4}> 
+             <FormControl isInvalid={!!formik.errors.firstName && formik.touched.firstName}> 
+               <FormLabel htmlFor="firstName">Name</FormLabel> 
+               <Input 
+                 id="firstName" 
+                 name="firstName" 
+                 {...formik.getFieldProps("firstName")} 
+               /> 
+               <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage> 
+             </FormControl> 
+             <FormControl isInvalid={!!formik.errors.email && formik.touched.email}> 
+               <FormLabel htmlFor="email">Email Address</FormLabel> 
                 <Input
                   {...formik.getFieldProps('email')}
                   id="email"

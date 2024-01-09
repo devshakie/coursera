@@ -21,7 +21,7 @@ const LandingSection = () => (
         src="https://i.pravatar.cc/150?img=7"
         alt="avatar"
       />
-      <Heading>{greeting}</Heading>
+      <h2>{greeting}</h2>
       <Heading>{bio1}</Heading>
       <Heading>{bio2}</Heading>
     </VStack>
